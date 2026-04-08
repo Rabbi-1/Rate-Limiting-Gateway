@@ -2,6 +2,7 @@ package com.rabbi.ratelimiting.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -13,8 +14,11 @@ public class RedisProperties {
     private String host = "localhost";
     private int port = 6379;
     private int timeout = 2000;
-
+    @Bean
     public JedisPool getJedisPool() {
+        //JedisPool is a thread-safe connection pool for the
+        // Jedis Java client, used to manage multiple connections
+        // to a Redis server.
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxTotal(50);// max total connections
         poolConfig.setMaxIdle(10);// idle connections allowed
@@ -22,7 +26,6 @@ public class RedisProperties {
         poolConfig.setTestOnBorrow(true);
         poolConfig.setTestOnReturn(true);
         return new JedisPool(poolConfig, host, port, timeout);
-        //23;31
     }
 }
 
